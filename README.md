@@ -3,7 +3,7 @@
 Источники:
 
 - <a href="https://thebestcode.ru/public/books/design_patterns.pdf">"Паттерны объектно-ориентированного проектирования". Банда четырех</a>
-- <a href="https://refactoring.guru/ru/design-patterns">Паттерны проектирования</a>
+- <a href="https://refactoring.guru/ru/design-patterns">"Паттерны проектирования". Refactoring Guru</a>
 - <a href="https://addyosmani.com/resources/essentialjsdesignpatterns/book/" target="_blank" rel="noopener">Learning JavaScript Design Patterns</a>
 - <a href="https://github.com/fbeline/design-patterns-JS/blob/master/docs.md" target="_blank" rel="noopener">Design Patterns JS</a>
 - <a href="https://github.com/sohamkamani/javascript-design-patterns-for-humans" target="_blank" rel="noopener">Design Patterns for Humans</a>
@@ -1016,9 +1016,7 @@ console.log(cart.cart) // undefined
 - Когда вы хотите использовать сторонний класс, но его интерфейс не соответствует остальному коду приложения
 - Когда вам нужно использовать несколько существующих подклассов, но в них не хватает какой-то общей функциональности, причём расширить суперкласс вы не можете
 
-#### Примеры
-
-Общий пример:
+#### Пример
 
 ```js
 class Soldier {
@@ -2194,9 +2192,7 @@ menu.choose('Контакты') // Текущая страница: Контак
 - Логирование запросов (логирующий прокси). Когда требуется хранить историю обращений к сервисному объекту
 - Кеширование объектов («умная» ссылка). Когда нужно кешировать результаты запросов клиентов и управлять их жизненным циклом
 
-#### Примеры
-
-Общий пример:
+#### Пример
 
 ```js
 class Car {
@@ -2511,9 +2507,9 @@ carManager.execute('buyVehicle', 'Ford Escort', '34232')
 
 ### <a name="interpret"></a> Интерпретатор
 
-#### Примеры
+Данный паттерн является нестандартным.
 
-Общий пример:
+#### Пример
 
 ```js
 class Sum {
@@ -3314,7 +3310,7 @@ console.log(temp2) // - foo- bar- baz
 - Когда над объектами сложной структуры объектов надо выполнять некоторые не связанные между собой операции, но вы не хотите «засорять» классы такими операциями
 - Когда новое поведение имеет смысл только для некоторых классов из существующей иерархии
 
-Общий пример:
+#### Пример
 
 ```js
 function bonusVisitor(employee) {

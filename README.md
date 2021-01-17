@@ -2749,9 +2749,6 @@ jane.send('Bye!')
 */
 ```
 
-Транслитератор:
-
-[![transliterator](https://github.com/harryheman/JavaScript-Design-Patterns/blob/main/!img/transliterator.png?raw=true)](https://codepen.io/harryheman/pen/NWRPXmz)
 Анимация через делегирование событий:
 
 [![animation](https://github.com/harryheman/JavaScript-Design-Patterns/blob/main/!img/animation.png?raw=true)](https://codepen.io/harryheman/pen/GRjgyav)

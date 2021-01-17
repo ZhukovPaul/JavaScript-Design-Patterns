@@ -1,7 +1,5 @@
-const log = console.log
-
-class Person {
-  constructor(firstName, lastName, age) {
+class _Person {
+  constructor({ firstName, lastName, age }) {
     this.firstName = firstName
     this.lastName = lastName
     this.age = age
@@ -23,17 +21,23 @@ class Person {
   }
 }
 
-const person = new Person('Иван', 'Петров', 30)
-person.getFullName().getAge().saySomething('Пока!')
+const _person = new Person({
+  firstName: 'Иван',
+  lastName: 'Петров',
+  age: 30
+})
+
+_person.getFullName().getAge().saySomething('Пока!')
 /*
   Этого человека зовут Иван Петров
   Этому человеку 30 лет
   Этот человек говорит: "Привет!"
 */
 
-class SubPerson extends Person {
-  constructor(firstName, lastName, age, lifestyle, skill) {
-    super(firstName, lastName, age)
+class _SubPerson extends _Person {
+  constructor({ lifestyle, skill /*, ...rest*/ }) {
+    // super(rest)
+    super()
     this.lifestyle = lifestyle
     this.skill = skill
     this.interest = null
@@ -64,15 +68,19 @@ class SubPerson extends Person {
   }
 }
 
-const developer = new SubPerson(
-  'Петр',
-  'Иванов',
-  25,
-  'разработчик',
-  'писать код на JavaScript'
-)
-developer.getInfo().saySomething('Программирование - это круто!').getSkill()
-  .like
+const _developer = new SubPerson({
+  firstName: 'Петр',
+  lastName: 'Иванов',
+  age: 25,
+  lifestyle: 'разработчик',
+  skill: 'писать код на JavaScript'
+})
+
+_developer
+  .getInfo()
+  .getAge()
+  .saySomething('Программирование - это круто!')
+  .getSkill().like
 /*
   Этого человека зовут Петр Иванов
   Он разработчик

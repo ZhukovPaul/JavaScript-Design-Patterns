@@ -514,7 +514,7 @@ console.log(burger)
 
 #### Примеры
 
-Конструктор-прототип (класс или суперкласс) Human и конструктор-наследник (подкласс) Developer. Функции-конструкторы:
+Конструктор-прототип (класс или суперкласс) Person и конструктор-наследник (подкласс) Developer. Функции-конструкторы:
 
 ```js
 const log = console.log
@@ -524,21 +524,6 @@ function Person({ firstName, lastName, age }) {
   this.lastName = lastName
   this.age = age
 }
-
-/*
-  Person.prototype.getFullName = function () {
-    log(`Этого человека зовут ${this.firstName} ${this.lastName}`)
-    return this
-  }
-  Person.prototype.getAge = function () {
-    log(`Этому человеку ${this.age} лет`)
-    return this
-  }
-  Person.prototype.saySomething = function (phrase) {
-    log(`Этот человек говорит: "${phrase}"`)
-    return this
-  }
-*/
 
 ;(function () {
   this.getFullName = function () {
@@ -574,34 +559,20 @@ function SubPerson({ lifestyle, skill, ...rest }) {
   this.skill = skill
   this.interest = null
 }
+
 SubPerson.prototype = Object.create(Person.prototype)
-
-/*
-  SubPerson.prototype.getSkill = function () {
-    log(`Этот ${this.lifestyle} умеет ${this.skill}`)
-    return this
-  }
-
-  SubPerson.prototype.getLike = function () {
-    log(
-      `Этот ${this.lifestyle} ${ this.interest ? `любит ${this.interest}` : 'ничего не любит' }`
-    )
-  }
-
-  SubPerson.prototype.setLike = function (value) {
-    this.interest = value
-  }
-*/
 ;(function () {
   this.getInfo = function () {
     this.getFullName()
     log(`Он ${this.lifestyle}`)
     return this
   }
+
   this.getSkill = function () {
     log(`Этот ${this.lifestyle} умеет ${this.skill}`)
     return this
   }
+
   this.getLike = function () {
     log(
       `Этот ${this.lifestyle} ${
@@ -624,6 +595,7 @@ const developer = new SubPerson({
 
 developer
   .getInfo()
+  .getAge()
   .saySomething('Программирование - это круто!')
   .getSkill()
   .getLike()
@@ -643,40 +615,46 @@ developer.getLike()
 Классы:
 
 ```js
-const log = console.log
-
-class Person {
-  constructor(firstName, lastName, age) {
+class _Person {
+  constructor({ firstName, lastName, age }) {
     this.firstName = firstName
     this.lastName = lastName
     this.age = age
   }
+
   getFullName() {
     log(`Этого человека зовут ${this.firstName} ${this.lastName}`)
     return this
   }
+
   getAge() {
     log(`Этому человеку ${this.age} лет`)
     return this
   }
+
   saySomething(phrase) {
     log(`Этот человек говорит: "${phrase}"`)
     return this
   }
 }
 
-const person = new Person('Иван', 'Петров', 30)
+const _person = new Person({
+  firstName: 'Иван',
+  lastName: 'Петров',
+  age: 30
+})
 
-person.getFullName().getAge().saySomething('Пока!')
+_person.getFullName().getAge().saySomething('Пока!')
 /*
-Этого человека зовут Иван Петров
-Этому человеку 30 лет
-Этот человек говорит: "Привет!"
+  Этого человека зовут Иван Петров
+  Этому человеку 30 лет
+  Этот человек говорит: "Привет!"
 */
 
-class SubPerson extends Person {
-  constructor(firstName, lastName, age, lifestyle, skill) {
-    super(firstName, lastName, age)
+class _SubPerson extends _Person {
+  constructor({ lifestyle, skill /*, ...rest*/ }) {
+    // super(rest)
+    super()
     this.lifestyle = lifestyle
     this.skill = skill
     this.interest = null
@@ -707,16 +685,19 @@ class SubPerson extends Person {
   }
 }
 
-const developer = new SubPerson(
-  'Петр',
-  'Иванов',
-  25,
-  'разработчик',
-  'писать код на JavaScript'
-)
+const _developer = new SubPerson({
+  firstName: 'Петр',
+  lastName: 'Иванов',
+  age: 25,
+  lifestyle: 'разработчик',
+  skill: 'писать код на JavaScript'
+})
 
-developer.getInfo().saySomething('Программирование - это круто!').getSkill()
-  .like
+_developer
+  .getInfo()
+  .getAge()
+  .saySomething('Программирование - это круто!')
+  .getSkill().like
 /*
   Этого человека зовут Петр Иванов
   Он разработчик
@@ -874,17 +855,17 @@ console.log(CounterModule.counter) // undefined
 // CounterModule.getInfo() // TypeError: CounterModule.getInfo is not a function
 ```
 
-Корзина для товаров. Объект и IIFE:
+Корзина для товаров. IIFE:
 
 ```js
 const cartModule = (() => {
   const cart = []
 
-  function getCount() {
+  function getProductCount() {
     return cart.length
   }
 
-  function getTotal() {
+  function getTotalPrice() {
     let total = 0
     for (const item of cart) {
       total += item.price
@@ -893,24 +874,24 @@ const cartModule = (() => {
   }
 
   return {
-    addItems(values) {
-      for (const val of values) {
-        cart.push(val)
-      }
+    addProducts(products) {
+      products.forEach((product) => {
+        cart.push(product)
+      })
     },
-    removeItem(object) {
-      const key = Object.keys(object)[0]
-      const value = Object.values(object)[0]
+    removeProduct(product) {
+      const key = Object.keys(product)[0]
+      const value = Object.values(product)[0]
 
-      const index = cart.findIndex((item) => (item[key] = value))
+      const index = cart.findIndex((item) => item[key] === value)
 
       cart.splice(index, 1)
     },
     getInfo() {
       console.log(
-        `В корзине ${getCount()} товар(а) на ${
-          getCount() > 1 ? 'общую ' : ''
-        }сумму ${getTotal()} рублей`
+        `В корзине ${getProductCount()} товар(а) на ${
+          getProductCount() > 1 ? 'общую ' : ''
+        }сумму ${getTotalPrice()} рублей`
       )
     }
   }
@@ -925,90 +906,83 @@ const products = [
   {
     id: '2',
     title: 'Масло',
-    price: 120
+    price: 150
   },
   {
     id: '3',
     title: 'Молоко',
-    price: 80
+    price: 100
   }
 ]
 
-cartModule.addItems(products)
+cartModule.addProducts(products)
 cartModule.getInfo()
-// В корзине 3 товар(а) на общую сумму 250 рублей
+// В корзине 3 товар(а) на общую сумму 300 рублей
 
-cartModule.removeItem({ id: 2 })
+cartModule.removeProduct({ id: '2' })
 cartModule.getInfo()
-// В корзине 2 товар(а) на общую сумму 200 рублей
+// В корзине 2 товар(а) на общую сумму 250 рублей
 
-cartModule.removeItem({ title: 'Молоко' })
+cartModule.removeProduct({ title: 'Молоко' })
 cartModule.getInfo()
-// В корзине 1 товар(а) на сумму 80 рублей
+// В корзине 1 товар(а) на сумму 100 рублей
+
+console.log(cartModule.cart) // undefined
+// cartModule.getProductCount() // Uncaught TypeError: cartModule.getProductCount is not a function
 ```
 
 Класс:
 
 ```js
 class Cart {
-  #cart
+  #cart = []
 
-  constructor() {
-    this.#cart = []
-  }
-
-  #getCount() {
+  #getProductCount() {
     return this.#cart.length
   }
 
-  #getTotal() {
-    let total = 0
-    for (const item of this.#cart) {
-      total += item.price
-    }
-    return total
+  #getTotalPrice() {
+    return this.#cart.reduce((total, { price }) => (total += price), 0)
   }
 
-  addItems(values) {
-    for (const val of values) {
-      this.#cart.push(val)
-    }
+  addProducts(products) {
+    this.#cart.push(...products)
   }
 
-  removeItem(object) {
-    const key = Object.keys(object)[0]
-    const value = Object.values(object)[0]
-
-    const index = this.#cart.findIndex((item) => (item[key] = value))
-
-    this.#cart.splice(index, 1)
+  removeProduct(product) {
+    for (const key in product) {
+      const value = product[key]
+      this.#cart = this.#cart.filter((item) => item[key] !== value)
+    }
   }
 
   getInfo() {
     console.log(
-      `В корзине ${this.#getCount()} товар(а) на ${
-        this.#getCount() > 1 ? 'общую ' : ''
-      }сумму ${this.#getTotal()} рублей`
+      `В корзине ${this.#getProductCount()} товар(а) на ${
+        this.#getProductCount() > 1 ? 'общую ' : ''
+      }сумму ${this.#getTotalPrice()} рублей`
     )
   }
 }
 
 const cart = new Cart()
 
-cart.addItems(products)
+cart.addProducts(products)
 cart.getInfo()
-// В корзине 3 товар(а) на общую сумму 250 рублей
+// В корзине 3 товар(а) на общую сумму 300 рублей
 
-cart.removeItem({ id: 2 })
+cart.removeProduct({ id: '2' })
 cart.getInfo()
 // В корзине 2 товар(а) на общую сумму 200 рублей
 
-cart.removeItem({ title: 'Молоко' })
+cart.removeProduct({ title: 'Молоко' })
 cart.getInfo()
-// В корзине 1 товар(а) на сумму 80 рублей
+// В корзине 1 товар(а) на сумму 50 рублей
 
 console.log(cart.cart) // undefined
-cart.getTotal() // TypeError: cart.getTotal is not a function
+// console.log(cart.#cart) // Uncaught SyntaxError: Private field '#cart' must be declared in an enclosing class
+// cart.getTotalPrice() // TypeError: cart.getTotal is not a function
+// cart.#getTotalPrice() // Error
 ```
 
 Не путать с CommonJS, ES6 и другими полноценными модулями.

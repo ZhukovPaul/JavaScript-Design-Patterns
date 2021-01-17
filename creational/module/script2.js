@@ -1,11 +1,11 @@
 const cartModule = (() => {
   const cart = []
 
-  function getCount() {
+  function getProductCount() {
     return cart.length
   }
 
-  function getTotal() {
+  function getTotalPrice() {
     let total = 0
     for (const item of cart) {
       total += item.price
@@ -14,26 +14,26 @@ const cartModule = (() => {
   }
 
   return {
-    addItems(values) {
-      for (const val of values) {
-        cart.push(val)
-      }
+    addProducts(products) {
+      products.forEach((product) => {
+        cart.push(product)
+      })
     },
-    removeItem(object) {
-      const key = Object.keys(object)[0]
-      const value = Object.values(object)[0]
+    removeProduct(product) {
+      const key = Object.keys(product)[0]
+      const value = Object.values(product)[0]
 
-      const index = cart.findIndex((item) => (item[key] = value))
+      const index = cart.findIndex((item) => item[key] === value)
 
       cart.splice(index, 1)
     },
     getInfo() {
       console.log(
-        `В корзине ${getCount()} товар(а) на ${
-          getCount() > 1 ? 'общую ' : ''
-        }сумму ${getTotal()} рублей`
+        `В корзине ${getProductCount()} товар(а) на ${
+          getProductCount() > 1 ? 'общую ' : ''
+        }сумму ${getTotalPrice()} рублей`
       )
-    },
+    }
   }
 })()
 
@@ -41,28 +41,31 @@ const products = [
   {
     id: '1',
     title: 'Хлеб',
-    price: 50,
+    price: 50
   },
   {
     id: '2',
     title: 'Масло',
-    price: 120,
+    price: 150
   },
   {
     id: '3',
     title: 'Молоко',
-    price: 80,
-  },
+    price: 100
+  }
 ]
 
-cartModule.addItems(products)
+cartModule.addProducts(products)
 cartModule.getInfo()
-// В корзине 3 товар(а) на общую сумму 250 рублей
+// В корзине 3 товар(а) на общую сумму 300 рублей
 
-cartModule.removeItem({ id: 2 })
+cartModule.removeProduct({ id: '2' })
 cartModule.getInfo()
-// В корзине 2 товар(а) на общую сумму 200 рублей
+// В корзине 2 товар(а) на общую сумму 250 рублей
 
-cartModule.removeItem({ title: 'Молоко' })
+cartModule.removeProduct({ title: 'Молоко' })
 cartModule.getInfo()
-// В корзине 1 товар(а) на сумму 80 рублей
+// В корзине 1 товар(а) на сумму 100 рублей
+
+console.log(cartModule.cart) // undefined
+// cartModule.getProductCount() // Uncaught TypeError: cartModule.getProductCount is not a function
